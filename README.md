@@ -74,17 +74,6 @@ This allows imputers like regression or KNN to estimate missing values from the 
 
 ---
 
-## 📊 Visualizations
-
-### 🔹 Performance Comparison
-![Performance Comparison](results/metrics_comparison.png)
-
-### 🔹 ROC & PR Curves
-| ROC Curve | PR Curve |
-|------------|-----------|
-| ![ROC Curve](results/roc_curves.png) | ![PR Curve](results/pr_curves.png) |
-
----
 
 ## 💡 Insights & Discussion
 
