@@ -1,4 +1,5 @@
 # DA5401-A6-Imputation-via-Regression-for-Missing-Data
+## Author: Dikshank Sihag (DA25M009)
 
 # 🧭 Credit Risk Modeling under Missing Data: Imputation Strategies & Performance Evaluation
 
@@ -12,94 +13,89 @@
 
 ## 📘 Executive Summary
 
-This project explores different **imputation strategies** for handling **Missing at Random (MAR)** data in the **UCI Credit Card Default Clients** dataset and evaluates their impact on **Logistic Regression** classification performance.
+This project explores different imputation strategies for handling Missing at Random (MAR) data in the UCI Credit Card Default Clients dataset and evaluates their impact on Logistic Regression classification performance.
 
 We compare:
 
-- **Model A:** Median Imputation  
-- **Model B:** Linear Regression Imputation  
-- **Model C:** Non-Linear KNN Imputation  
-- **Model D:** Listwise Deletion (baseline without imputation)
+- Model A: Median Imputation  
+- Model B: Linear Regression Imputation  
+- Model C: Non-Linear KNN Imputation  
+- Model D: Listwise Deletion (baseline without imputation)
 
-Each dataset was standardized and evaluated using **Weighted F1**, **ROC-AUC**, and **PR-AUC** — metrics suited for imbalanced binary classification.
+Each dataset was standardized and evaluated using Weighted F1, ROC-AUC, and PR-AUC — metrics suited for imbalanced binary classification.
 
-> 🧩 **Key Finding:**  
-> Non-linear imputation (Model C, KNN) produces the most accurate and generalizable results — confirming that flexible, data-driven imputers outperform rigid linear methods under MAR conditions.
+The results show that all three imputation methods perform comparably and outperform the listwise deletion baseline in most metrics, with KNN imputation providing slightly better overall balance. Non-linear imputation better preserves feature dependencies and generalizes effectively under MAR conditions.
 
 ---
 
 ## 🧠 Theoretical Background
 
-### 🔹 Why “Missing at Random” (MAR)?
-Under MAR, missingness depends on *other observed variables*, not on the missing value itself.  
-Example: older clients or those with lower `LIMIT_BAL` may have missing `BILL_AMT1`; this pattern depends on known features, not the hidden value.  
+### Missing at Random (MAR)
+Under MAR, missingness depends on other observed variables, not on the missing value itself.  
+For example, older clients or those with lower `LIMIT_BAL` may have missing `BILL_AMT1`; this pattern depends on known features, not the hidden value.  
 
-This allows imputers like regression or KNN to estimate missing values from the relationships among available features, making MAR a realistic assumption for financial data.
+This allows imputers such as regression or KNN to estimate missing values from relationships among available features, making MAR a realistic assumption for financial data.
 
 
 ---
 
 ## ⚙️ Implementation Overview
 
-### **Part A – Data Preprocessing & Imputation**
+### Part A – Data Preprocessing & Imputation
 
 | Model | Technique | Concept | Pros | Cons |
 |:------|:-----------|:--------|:-----|:----|
-| **A** | Median Imputation | Replaces with robust central tendency | Fast, robust | Ignores correlations |
-| **B** | Linear Regression | Predicts from linear predictors | Preserves correlations | Misses non-linearities |
-| **C** | Non-Linear KNN | Imputes by nearest neighbors | Captures complex patterns | Slower |
-| **D** | Listwise Deletion | Drops rows with NaN | Simple | Data loss, bias |
+| A | Median Imputation | Replaces with robust central tendency | Fast, robust | Ignores correlations |
+| B | Linear Regression | Predicts from linear predictors | Preserves correlations | Misses non-linearities |
+| C | Non-Linear KNN | Imputes by nearest neighbors | Captures complex patterns | Slower |
+| D | Listwise Deletion | Drops rows with NaN | Simple | Data loss, bias |
 
 ---
 
-### **Part B – Model Training & Evaluation**
+### Part B – Model Training & Evaluation
 
-- Classifier: **Logistic Regression**  
+- Classifier: Logistic Regression  
 - Split: 80 % train / 20 % test  
-- Scaler: **StandardScaler**  
+- Scaler: StandardScaler  
 - Metrics: Accuracy | Precision | Recall | Weighted F1 | ROC-AUC | PR-AUC
 
 ---
 
-### **Part C – Results Summary**
+### Part C – Results Summary
 
 | Model | Accuracy | Precision | Recall | Weighted F1 | ROC-AUC | PR-AUC |
 |:------|:---------:|:----------:|:-------:|:------------:|:--------:|:-------:|
-| **A – Median** | 0.80 | 0.76 | 0.77 | 0.76 | 0.68 | 0.45 |
-| **B – Linear Reg.** | 0.80 | 0.77 | 0.78 | 0.77 | 0.69 | 0.47 |
-| **C – Non-Linear KNN** | **0.81** | **0.78** | **0.79** | **0.77** | **0.71** | **0.49** |
-| **D – Listwise** | 0.79 | 0.75 | 0.74 | 0.74 | 0.66 | 0.42 |
-
-> ✅ **Model C (KNN)** performs best overall — confirming that non-linear relationships capture MAR data structure more effectively.
+| Model A (Median) | 0.8078 | 0.7894 | 0.8078 | 0.7691 | 0.7071 | 0.4935 |
+| Model B (Linear Reg) | 0.8077 | 0.7887 | 0.8077 | 0.7695 | 0.7073 | 0.4936 |
+| Model C (Non-Linear KNN) | 0.8077 | 0.7888 | 0.8077 | 0.7694 | 0.7074 | 0.4935 |
+| Model D (Listwise Deletion) | 0.8057 | 0.7845 | 0.8057 | 0.7672 | 0.7201 | 0.4783 |
 
 ---
-
-
 ## 💡 Insights & Discussion
 
-### 1️⃣ Listwise Deletion vs Imputation
-- Listwise Deletion (Model D) removes data → lower power & bias.  
-- Imputation (A–C) retains samples → better generalization.  
-- Model D underperforms due to **information loss**.
+### Listwise Deletion vs Imputation
+Listwise Deletion (Model D) removes data, reducing representativeness and statistical power.  
+Imputation-based models (A–C) retain all samples, allowing stronger generalization and less bias.  
+Model D performs slightly worse overall because it discards informative patterns during training.
 
-### 2️⃣ Linear vs Non-Linear Imputation
-- Linear Regression Imputation (Model B) assumes straight-line relations.  
-- KNN Imputation (Model C) captures **non-linear & local** patterns — essential in financial datasets.
+### Linear vs Non-Linear Imputation
+Linear Regression Imputation (Model B) preserves basic correlations but assumes linear relationships.  
+Non-Linear KNN Imputation (Model C) captures local non-linear patterns, modeling realistic credit behavior.  
+Their near-identical performance suggests that under mild MAR conditions, both linear and non-linear imputers perform consistently, though KNN offers more flexibility in complex datasets.
 
-### 3️⃣ Recommended Strategy
+### Recommended Strategy
 
 | Case | Recommended Approach | Rationale |
 |------|----------------------|------------|
-| **MCAR** | Simple Median/Mean | No systematic bias |
-| **MAR** | **KNN / MissForest / Iterative RF** | Captures observed dependencies |
-| **MNAR** | Specialized model-based | Depends on unobserved causes |
+| MCAR | Simple Median/Mean | No systematic bias |
+| MAR | KNN / MissForest / Iterative RF | Captures observed dependencies |
+| MNAR | Specialized model-based | Depends on unobserved causes |
 
 ---
 
 ## 🧰 Installation & Setup
 
-### 🔸 Clone the Repository
+### Clone the Repository
 ```bash
 git clone https://github.com/<your-username>/UCI-Credit-Imputation.git
 cd UCI-Credit-Imputation
-
