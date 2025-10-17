@@ -15,7 +15,7 @@
 
 This project explores different imputation strategies for handling Missing at Random (MAR) data in the UCI Credit Card Default Clients dataset and evaluates their impact on Logistic Regression classification performance.
 
-We compare:
+I compare:
 
 - Model A: Median Imputation  
 - Model B: Linear Regression Imputation  
